@@ -51,8 +51,9 @@ int main()
     int creditHours;
     Database *db = createDatabase();
     Student *student;
+    int looper = 1;
 
-    printf("Would you like to start with an empty database (E) or a file (F)? ");
+    printf("CS 211, Spring 2023\nProgram 4: Database of Students\n\nEnter E to start with an empty database,\nor F to start with a database that has information on students from a file.\nYour choice --> ");
     scanf("%c", &choice);
     while (choice != 'E' && choice != 'F')
     {
@@ -62,7 +63,7 @@ int main()
 
     if (choice == 'F')
     {
-        printf("Please enter the filename: ");
+        printf("Enter the name of the file you would like to use: ");
         scanf("%s", filename);
 
         FILE *fp = fopen(filename, "r");
@@ -81,55 +82,49 @@ int main()
         fclose(fp);
     }
 
-    printf("Welcome to the student database system!\n");
-
     do
     {
-        printf("\nMain menu:\n");
-        printf("C) Create a new student record\n");
-        printf("R) Read from the database\n");
-        printf("D) Delete a student record\n");
-        printf("X) Exit\n");
-        printf("Please enter your choice: ");
+        printf("Enter:\tC to create a new student and add them to the database,\n\tR to read from the database,\n\tD to delete a student from the database, or\n\tX to exit the program.\nYour choice --> ");
         scanf(" %c", &choice);
 
         switch (choice)
         {
         case 'C':
-            printf("\nPlease enter the following information for the new student:\n");
-            printf("Name: ");
+            printf("Enter the name of the new student: ");
             scanf("%s", name);
-            printf("ID: ");
+            printf("Enter the ID of the new student: ");
             scanf("%s", id);
-            printf("GPA: ");
+            printf("Enter the GPA of the new student: ");
             scanf("%lf", &gpa);
-            printf("Credit hours: ");
+            printf("Enter the credit hours of the new student: ");
             scanf("%d", &creditHours);
 
             student = createStudent(name, id, gpa, creditHours);
             addStudent(db, student);
 
-            printf("\nStudent %s (%s) was successfully added to the database.\n", name, id);
+            printf("Successfully added the following student to the database!\n%s:\n\tID - %s\n\tGPA - %.2lf\n\tCredit Hours - %d\n\n", name, id, gpa, creditHours);
             break;
 
         case 'R':
         {
-            printf("\nRead menu:\n");
-            printf("1. Print information of first 10 students\n");
-            printf("2. Print students on honor roll\n");
-            printf("3. Print students on academic probation\n");
-            printf("4. Print freshman students\n");
-            printf("5. Print sophomore students\n");
-            printf("6. Print junior students\n");
-            printf("7. Print senior students\n");
-            printf("8. Back to main menu\n");
+            printf("Select one of the following:\n");
+            printf("\t1) Display the head (first 10 rows) of the database\n");
+            printf("\t2) Display students on the honor roll, in order of their GPA\n");
+            printf("\t3) Display students on academic probation, in order of their GPA\n");
+            printf("\t4) Display freshmen students, in order of their name\n");
+            printf("\t5) Display sophomore students, in order of their name\n");
+            printf("\t6) Display junior students, in order of their name\n");
+            printf("\t7) Display senior students, in order of their name\n");
+            printf("\t8) Display the information of a particular student\nYour choice --> ");
 
             char readChoice;
-            do
+            scanf(" %c", &readChoice);
+            
+            while (readChoice < '1' || readChoice > '8')
             {
-                printf("\nEnter your choice (1-8): ");
+                printf("Sorry, that input was invalid. Please try again.\nYour choice -->  ");
                 scanf(" %c", &readChoice);
-            } while (readChoice < '1' || readChoice > '8');
+            } 
 
             switch (readChoice)
             {
@@ -148,26 +143,37 @@ int main()
                 }
                 break;
             }
-            case '2': {
-            printf("\nStudents on honor roll:\n");
-            StudentNode* p = db->pHonorRollList;
-            while (p != NULL) {
-                printf("\nName: %s %s\n", p->pStudent->name, p->pStudent->id);
-                printf("GPA: %.2lf\n", p->pStudent->gpa);
-                printf("Credit hours: %d\n", p->pStudent->creditHours);
-                p = p->pNext;
+            case '2':
+            {
+                printf("\nStudents on honor roll:\n");
+                StudentNode *p = db->pHonorRollList;
+                while (p != NULL)
+                {
+                    printf("\nName: %s %s\n", p->pStudent->name, p->pStudent->id);
+                    printf("GPA: %.2lf\n", p->pStudent->gpa);
+                    printf("Credit hours: %d\n", p->pStudent->creditHours);
+                    p = p->pNext;
+                }
+                break;
             }
-            break;
-        }
             }
         }
+        break;
+
+
+        case 'X':
+            {
+                printf("\nThanks for playing!\nExiting...");
+                looper = 0;
+                break;
+            }
         }
-    } while (choice != 'c');
+    } while (looper);
 }
 
-
-Database* createDatabase() {
-    Database* db = malloc(sizeof(Database));
+Database *createDatabase()
+{
+    Database *db = malloc(sizeof(Database));
     db->pIDList = NULL;
     db->pHonorRollList = NULL;
     db->pAcademicProbationList = NULL;
@@ -178,10 +184,10 @@ Database* createDatabase() {
     return db;
 }
 
-
-void addStudent(Database* db, Student* student) {
+void addStudent(Database *db, Student *student)
+{
     // Create new student node
-    StudentNode* newNode = malloc(sizeof(StudentNode));
+    StudentNode *newNode = malloc(sizeof(StudentNode));
     newNode->pStudent = student;
     newNode->pNext = NULL;
 
@@ -190,51 +196,60 @@ void addStudent(Database* db, Student* student) {
     db->pIDList = newNode;
 
     // Insert student into class standing lists
-    if (student->creditHours < 30) {
-        StudentNode* newFreshmanNode = malloc(sizeof(StudentNode));
+    if (student->creditHours < 30)
+    {
+        StudentNode *newFreshmanNode = malloc(sizeof(StudentNode));
         newFreshmanNode->pStudent = student;
         newFreshmanNode->pNext = db->pFreshmanList;
         db->pFreshmanList = newFreshmanNode;
-    } else if (student->creditHours < 60) {
-        StudentNode* newSophomoreNode = malloc(sizeof(StudentNode));
+    }
+    else if (student->creditHours < 60)
+    {
+        StudentNode *newSophomoreNode = malloc(sizeof(StudentNode));
         newSophomoreNode->pStudent = student;
         newSophomoreNode->pNext = db->pSophomoreList;
         db->pSophomoreList = newSophomoreNode;
-    } else if (student->creditHours < 90) {
-        StudentNode* newJuniorNode = malloc(sizeof(StudentNode));
+    }
+    else if (student->creditHours < 90)
+    {
+        StudentNode *newJuniorNode = malloc(sizeof(StudentNode));
         newJuniorNode->pStudent = student;
         newJuniorNode->pNext = db->pJuniorList;
         db->pJuniorList = newJuniorNode;
-    } else {
-        StudentNode* newSeniorNode = malloc(sizeof(StudentNode));
+    }
+    else
+    {
+        StudentNode *newSeniorNode = malloc(sizeof(StudentNode));
         newSeniorNode->pStudent = student;
         newSeniorNode->pNext = db->pSeniorList;
         db->pSeniorList = newSeniorNode;
     }
 
     // Insert student into honor roll or academic probation list
-    if (student->gpa >= 3.5) {
-        StudentNode* newHonorRollNode = malloc(sizeof(StudentNode));
+    if (student->gpa >= 3.5)
+    {
+        StudentNode *newHonorRollNode = malloc(sizeof(StudentNode));
         newHonorRollNode->pStudent = student;
         newHonorRollNode->pNext = db->pHonorRollList;
         db->pHonorRollList = newHonorRollNode;
-    } else if (student->gpa < 2.0) {
-        StudentNode* newAcademicProbationNode = malloc(sizeof(StudentNode));
+    }
+    else if (student->gpa < 2.0)
+    {
+        StudentNode *newAcademicProbationNode = malloc(sizeof(StudentNode));
         newAcademicProbationNode->pStudent = student;
         newAcademicProbationNode->pNext = db->pAcademicProbationList;
         db->pAcademicProbationList = newAcademicProbationNode;
     }
 }
 
-
-
-Student* createStudent(char* name, char* id, double gpa, int creditHours) {
+Student *createStudent(char *name, char *id, double gpa, int creditHours)
+{
     // Allocate memory for a new Student
-    Student* student = (Student*) malloc(sizeof(Student));
+    Student *student = (Student *)malloc(sizeof(Student));
 
     // Allocate memory for the name and id strings
-    student->name = (char*) malloc((strlen(name) + 1) * sizeof(char));
-    student->id = (char*) malloc((strlen(id) + 1) * sizeof(char));
+    student->name = (char *)malloc((strlen(name) + 1) * sizeof(char));
+    student->id = (char *)malloc((strlen(id) + 1) * sizeof(char));
 
     // Copy the name and id strings into the new memory locations
     strcpy(student->name, name);
