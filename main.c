@@ -367,9 +367,9 @@ void addStudent(Database *db, Student *student)
     // Insert student into class standing lists
     if (student->creditHours < 30)
     {
-        StudentNode *newNode = malloc(sizeof(StudentNode));
-        newNode->pStudent = student;
-        newNode->pNext = NULL;
+        StudentNode *newFreshmanNode = malloc(sizeof(StudentNode));
+        newFreshmanNode->pStudent = student;
+        newFreshmanNode->pNext = NULL;
 
         // Find the correct position to insert the new node in the Freshman list
         StudentNode *prev = NULL;
@@ -383,16 +383,15 @@ void addStudent(Database *db, Student *student)
         // Insert the new node in the Freshman list
         if (prev == NULL)
         {
-            newNode->pNext = db->pFreshmanList;
-            db->pFreshmanList = newNode;
+            newFreshmanNode->pNext = db->pFreshmanList;
+            db->pFreshmanList = newFreshmanNode;
         }
         else
         {
-            prev->pNext = newNode;
-            newNode->pNext = curr;
+            prev->pNext = newFreshmanNode;
+            newFreshmanNode->pNext = curr;
         }
     }
-
     else if (student->creditHours < 60)
     {
         StudentNode *newSophomoreNode = malloc(sizeof(StudentNode));
@@ -478,11 +477,11 @@ void addStudent(Database *db, Student *student)
 
     // Insert student into honor roll or academic probation list
     if (student->gpa >= 3.5)
-    {
+     {
         // Create new student node
-        StudentNode *newNode = malloc(sizeof(StudentNode));
-        newNode->pStudent = student;
-        newNode->pNext = NULL;
+        StudentNode *newHonorRollNode = malloc(sizeof(StudentNode));
+        newHonorRollNode->pStudent = student;
+        newHonorRollNode->pNext = NULL;
 
         // Insert student into Honor Roll list in order of GPA
         StudentNode *prev = NULL;
@@ -494,13 +493,13 @@ void addStudent(Database *db, Student *student)
         }
         if (prev == NULL)
         {
-            newNode->pNext = db->pHonorRollList;
-            db->pHonorRollList = newNode;
+            newHonorRollNode->pNext = db->pHonorRollList;
+            db->pHonorRollList = newHonorRollNode;
         }
         else
         {
-            prev->pNext = newNode;
-            newNode->pNext = curr;
+            prev->pNext = newHonorRollNode;
+            newHonorRollNode->pNext = curr;
         }
     }
 
@@ -562,14 +561,14 @@ Student *createStudent(char *name, char *id, double gpa, int creditHours)
 void deleteStudent(Database *db, char *id) {
     StudentNode *prev = NULL, *curr;
     StudentNode **list = &db->pIDList;
-    
+
     // Find the node containing the student with the given ID
     for (curr = *list; curr != NULL; prev = curr, curr = curr->pNext) {
         if (strcmp(curr->pStudent->id, id) == 0) {
             break;
         }
     }
-    
+
     // If the node was found, remove it from all lists
     if (curr != NULL) {
         // Remove from ID list
@@ -579,7 +578,7 @@ void deleteStudent(Database *db, char *id) {
         } else {
             prev->pNext = curr->pNext;
         }
-        
+
         // Remove from other lists, if present
         if (isStudentInList(db->pHonorRollList, curr->pStudent)) {
             db->pHonorRollList = removeStudentFromList(db->pHonorRollList, curr->pStudent);
@@ -599,7 +598,7 @@ void deleteStudent(Database *db, char *id) {
         if (isStudentInList(db->pSeniorList, curr->pStudent)) {
             db->pSeniorList = removeStudentFromList(db->pSeniorList, curr->pStudent);
         }
-        
+
         // Free memory
         free(curr->pStudent->name);
         free(curr->pStudent->id);
