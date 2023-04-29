@@ -343,11 +343,31 @@ void addStudent(Database *db, Student *student)
     // Insert student into honor roll or academic probation list
     if (student->gpa >= 3.5)
     {
-        StudentNode *newHonorRollNode = malloc(sizeof(StudentNode));
-        newHonorRollNode->pStudent = student;
-        newHonorRollNode->pNext = db->pHonorRollList;
-        db->pHonorRollList = newHonorRollNode;
+        // Create new student node
+        StudentNode *newNode = malloc(sizeof(StudentNode));
+        newNode->pStudent = student;
+        newNode->pNext = NULL;
+
+        // Insert student into Honor Roll list in order of GPA
+        StudentNode *prev = NULL;
+        StudentNode *curr = db->pHonorRollList;
+        while (curr != NULL && student->gpa > curr->pStudent->gpa)
+        {
+            prev = curr;
+            curr = curr->pNext;
+        }
+        if (prev == NULL)
+        {
+            newNode->pNext = db->pHonorRollList;
+            db->pHonorRollList = newNode;
+        }
+        else
+        {
+            prev->pNext = newNode;
+            newNode->pNext = curr;
+        }
     }
+
     else if (student->gpa < 2.0)
     {
         StudentNode *newAcademicProbationNode = malloc(sizeof(StudentNode));
