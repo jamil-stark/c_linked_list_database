@@ -343,6 +343,9 @@ int main()
             looper = 0;
             break;
         }
+        default:
+            printf("Invalid option. Try again.\n");
+            break;
         }
     } while (looper);
 }
