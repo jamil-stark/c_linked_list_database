@@ -132,7 +132,7 @@ int main()
 
     do
     {
-        printf("Enter:\tC to create a new student and add them to the database,\n\tR to read from the database,\n\tD to delete a student from the database, or\n\tX to exit the program.\nYour choice --> ");
+        printf("\nEnter:\tC to create a new student and add them to the database,\n\tR to read from the database,\n\tD to delete a student from the database, or\n\tX to exit the program.\nYour choice --> ");
         scanf(" %c", &choice);
         getchar();
 
@@ -267,8 +267,6 @@ int main()
                 }
                 break;
             }
-
-
             }
         }
         break;
@@ -359,23 +357,85 @@ void addStudent(Database *db, Student *student)
     {
         StudentNode *newSophomoreNode = malloc(sizeof(StudentNode));
         newSophomoreNode->pStudent = student;
-        newSophomoreNode->pNext = db->pSophomoreList;
-        db->pSophomoreList = newSophomoreNode;
+        newSophomoreNode->pNext = NULL;
+
+        // Find the correct position to insert the new node in the Freshman list
+        StudentNode *prev = NULL;
+        StudentNode *curr = db->pSophomoreList;
+        while (curr != NULL && strcmp(curr->pStudent->name, student->name) < 0)
+        {
+            prev = curr;
+            curr = curr->pNext;
+        }
+
+        // Insert the new node in the Freshman list
+        if (prev == NULL)
+        {
+            newSophomoreNode->pNext = db->pSophomoreList;
+            db->pSophomoreList = newSophomoreNode;
+        }
+        else
+        {
+            prev->pNext = newSophomoreNode;
+            newSophomoreNode->pNext = curr;
+        }
     }
     else if (student->creditHours < 90)
     {
         StudentNode *newJuniorNode = malloc(sizeof(StudentNode));
         newJuniorNode->pStudent = student;
-        newJuniorNode->pNext = db->pJuniorList;
-        db->pJuniorList = newJuniorNode;
+        newJuniorNode->pNext = NULL;
+
+        // Find the correct position to insert the new node in the Freshman list
+        StudentNode *prev = NULL;
+        StudentNode *curr = db->pJuniorList;
+        while (curr != NULL && strcmp(curr->pStudent->name, student->name) < 0)
+        {
+            prev = curr;
+            curr = curr->pNext;
+        }
+
+        // Insert the new node in the Freshman list
+        if (prev == NULL)
+        {
+            newJuniorNode->pNext = db->pJuniorList;
+            db->pJuniorList = newJuniorNode;
+        }
+        else
+        {
+            prev->pNext = newJuniorNode;
+            newJuniorNode->pNext = curr;
+        }
     }
+
     else
     {
         StudentNode *newSeniorNode = malloc(sizeof(StudentNode));
         newSeniorNode->pStudent = student;
-        newSeniorNode->pNext = db->pSeniorList;
-        db->pSeniorList = newSeniorNode;
+        newSeniorNode->pNext = NULL;
+
+        // Find the correct position to insert the new node in the Freshman list
+        StudentNode *prev = NULL;
+        StudentNode *curr = db->pSeniorList;
+        while (curr != NULL && strcmp(curr->pStudent->name, student->name) < 0)
+        {
+            prev = curr;
+            curr = curr->pNext;
+        }
+
+        // Insert the new node in the Freshman list
+        if (prev == NULL)
+        {
+            newSeniorNode->pNext = db->pSeniorList;
+            db->pSeniorList = newSeniorNode;
+        }
+        else
+        {
+            prev->pNext = newSeniorNode;
+            newSeniorNode->pNext = curr;
+        }
     }
+
 
     // Insert student into honor roll or academic probation list
     if (student->gpa >= 3.5)
