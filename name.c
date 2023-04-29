@@ -36,7 +36,9 @@ typedef struct
 Database *createDatabase();
 Student *createStudent(char *name, char *id, double gpa, int creditHours);
 void addStudent(Database *db, Student *student);
-// void deleteStudent(Database *db, char *id);
+void deleteStudent(Database *db, char *id);
+int isStudentInList(StudentNode *list, Student *student);
+StudentNode* removeStudentFromList(StudentNode *list, Student *student);
 // void printStudent(Student *student);
 // void printDatabase(Database *db);
 // void printHonorRoll(Database *db);
@@ -274,9 +276,40 @@ int main()
                 printf("\n");
                 break;
             }
+
+            case '8':
+            {
+                printf("Enter the id of the student to find: ");
+                scanf("%s", id);
+                StudentNode *p = db->pIDList;
+                while (p != NULL)
+                {
+                    if (strcmp(p->pStudent->id, id) == 0)
+                    {
+                        printf("%s: \n\tID - %s\n", p->pStudent->name, p->pStudent->id);
+                        printf("\tGPA - %.2lf\n", p->pStudent->gpa);
+                        printf("\tCredit hours - %d\n", p->pStudent->creditHours);
+                        break;
+                    }
+                    p = p->pNext;
+                }
+                if (p == NULL)
+                {
+                    printf("Sorry, there is no student in the database with the id %s.\n", id);
+                }
+                break;
+            }
             }
         }
         break;
+
+        case 'D':
+        {
+            printf("Enter the ID of the student to be removed: ");
+            scanf("%s", id);
+            deleteStudent(db, id);
+            break;
+        }
 
         case 'X':
         {
@@ -443,7 +476,6 @@ void addStudent(Database *db, Student *student)
         }
     }
 
-
     // Insert student into honor roll or academic probation list
     if (student->gpa >= 3.5)
     {
@@ -525,4 +557,82 @@ Student *createStudent(char *name, char *id, double gpa, int creditHours)
 
     // Return a pointer to the new Student
     return student;
+}
+
+void deleteStudent(Database *db, char *id) {
+    StudentNode *prev = NULL, *curr;
+    StudentNode **list = &db->pIDList;
+    
+    // Find the node containing the student with the given ID
+    for (curr = *list; curr != NULL; prev = curr, curr = curr->pNext) {
+        if (strcmp(curr->pStudent->id, id) == 0) {
+            break;
+        }
+    }
+    
+    // If the node was found, remove it from all lists
+    if (curr != NULL) {
+        // Remove from ID list
+        if (prev == NULL) {
+            // The node is the head of the list
+            *list = curr->pNext;
+        } else {
+            prev->pNext = curr->pNext;
+        }
+        
+        // Remove from other lists, if present
+        if (isStudentInList(db->pHonorRollList, curr->pStudent)) {
+            db->pHonorRollList = removeStudentFromList(db->pHonorRollList, curr->pStudent);
+        }
+        if (isStudentInList(db->pAcademicProbationList, curr->pStudent)) {
+            db->pAcademicProbationList = removeStudentFromList(db->pAcademicProbationList, curr->pStudent);
+        }
+        if (isStudentInList(db->pFreshmanList, curr->pStudent)) {
+            db->pFreshmanList = removeStudentFromList(db->pFreshmanList, curr->pStudent);
+        }
+        if (isStudentInList(db->pSophomoreList, curr->pStudent)) {
+            db->pSophomoreList = removeStudentFromList(db->pSophomoreList, curr->pStudent);
+        }
+        if (isStudentInList(db->pJuniorList, curr->pStudent)) {
+            db->pJuniorList = removeStudentFromList(db->pJuniorList, curr->pStudent);
+        }
+        if (isStudentInList(db->pSeniorList, curr->pStudent)) {
+            db->pSeniorList = removeStudentFromList(db->pSeniorList, curr->pStudent);
+        }
+        
+        // Free memory
+        free(curr->pStudent->name);
+        free(curr->pStudent->id);
+        free(curr->pStudent);
+        free(curr);
+        printf("Student with ID %s has been removed from the database.\n", id);
+    } else {
+        printf("Student with ID %s not found in the database.\n", id);
+    }
+}
+
+StudentNode* removeStudentFromList(StudentNode *list, Student *student) {
+    StudentNode *prev = NULL, *curr;
+    for (curr = list; curr != NULL; prev = curr, curr = curr->pNext) {
+        if (curr->pStudent == student) {
+            if (prev == NULL) {
+                list = curr->pNext;
+            } else {
+                prev->pNext = curr->pNext;
+            }
+            free(curr);
+            return list;
+        }
+    }
+    return list;
+}
+
+
+int isStudentInList(StudentNode *list, Student *student) {
+    for (StudentNode *curr = list; curr != NULL; curr = curr->pNext) {
+        if (curr->pStudent == student) {
+            return 1;
+        }
+    }
+    return 0;
 }
