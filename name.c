@@ -183,12 +183,13 @@ int main()
                 StudentNode *p = db->pIDList;
                 while (count < 10 && p != NULL)
                 {
-                    printf("\nName: \t%s \n\tID - %s\n", p->pStudent->name, p->pStudent->id);
+                    printf("%s: \n\tID - %s\n", p->pStudent->name, p->pStudent->id);
                     printf("\tGPA - %.2lf\n", p->pStudent->gpa);
                     printf("\tCredit hours - %d\n", p->pStudent->creditHours);
                     p = p->pNext;
                     count++;
                 }
+                printf("\n");
                 break;
             }
             case '2':
@@ -196,11 +197,12 @@ int main()
                 StudentNode *p = db->pHonorRollList;
                 while (p != NULL)
                 {
-                    printf("\nName: \t%s \n\tID - %s\n", p->pStudent->name, p->pStudent->id);
+                    printf("%s: \n\tID - %s\n", p->pStudent->name, p->pStudent->id);
                     printf("\tGPA - %.2lf\n", p->pStudent->gpa);
                     printf("\tCredit hours - %d\n", p->pStudent->creditHours);
                     p = p->pNext;
                 }
+                printf("\n");
                 break;
             }
             case '3':
@@ -208,11 +210,12 @@ int main()
                 StudentNode *p = db->pAcademicProbationList;
                 while (p != NULL)
                 {
-                    printf("\nName: \t%s \n\tID - %s\n", p->pStudent->name, p->pStudent->id);
+                    printf("%s: \n\tID - %s\n", p->pStudent->name, p->pStudent->id);
                     printf("\tGPA - %.2lf\n", p->pStudent->gpa);
                     printf("\tCredit hours - %d\n", p->pStudent->creditHours);
                     p = p->pNext;
                 }
+                printf("\n");
                 break;
             }
 
@@ -221,11 +224,12 @@ int main()
                 StudentNode *p = db->pFreshmanList;
                 while (p != NULL)
                 {
-                    printf("\nName: \t%s \n\tID - %s\n", p->pStudent->name, p->pStudent->id);
+                    printf("%s: \n\tID - %s\n", p->pStudent->name, p->pStudent->id);
                     printf("\tGPA - %.2lf\n", p->pStudent->gpa);
                     printf("\tCredit hours - %d\n", p->pStudent->creditHours);
                     p = p->pNext;
                 }
+                printf("\n");
                 break;
             }
 
@@ -234,11 +238,12 @@ int main()
                 StudentNode *p = db->pSophomoreList;
                 while (p != NULL)
                 {
-                    printf("\nName: \t%s \n\tID - %s\n", p->pStudent->name, p->pStudent->id);
+                    printf("%s: \n\tID - %s\n", p->pStudent->name, p->pStudent->id);
                     printf("\tGPA - %.2lf\n", p->pStudent->gpa);
                     printf("\tCredit hours - %d\n", p->pStudent->creditHours);
                     p = p->pNext;
                 }
+                printf("\n");
                 break;
             }
 
@@ -247,11 +252,12 @@ int main()
                 StudentNode *p = db->pJuniorList;
                 while (p != NULL)
                 {
-                    printf("\nName: \t%s \n\tID - %s\n", p->pStudent->name, p->pStudent->id);
+                    printf("%s: \n\tID - %s\n", p->pStudent->name, p->pStudent->id);
                     printf("\tGPA - %.2lf\n", p->pStudent->gpa);
                     printf("\tCredit hours - %d\n", p->pStudent->creditHours);
                     p = p->pNext;
                 }
+                printf("\n");
                 break;
             }
 
@@ -260,11 +266,12 @@ int main()
                 StudentNode *p = db->pSeniorList;
                 while (p != NULL)
                 {
-                    printf("\nName: \t%s \n\tID - %s\n", p->pStudent->name, p->pStudent->id);
+                    printf("%s: \n\tID - %s\n", p->pStudent->name, p->pStudent->id);
                     printf("\tGPA - %.2lf\n", p->pStudent->gpa);
                     printf("\tCredit hours - %d\n", p->pStudent->creditHours);
                     p = p->pNext;
                 }
+                printf("\n");
                 break;
             }
             }
