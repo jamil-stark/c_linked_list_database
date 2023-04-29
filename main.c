@@ -197,6 +197,11 @@ int main()
             case '2':
             {
                 StudentNode *p = db->pHonorRollList;
+                //checkl if list is empty.
+                if (p == NULL)
+                {
+                    printf("There are no students matching that criteria.");
+                }
                 while (p != NULL)
                 {
                     printf("%s: \n\tID - %s\n", p->pStudent->name, p->pStudent->id);
@@ -210,6 +215,10 @@ int main()
             case '3':
             {
                 StudentNode *p = db->pAcademicProbationList;
+                if (p == NULL)
+                {
+                    printf("There are no students matching that criteria.");
+                }
                 while (p != NULL)
                 {
                     printf("%s: \n\tID - %s\n", p->pStudent->name, p->pStudent->id);
@@ -224,6 +233,10 @@ int main()
             case '4':
             {
                 StudentNode *p = db->pFreshmanList;
+                if (p == NULL)
+                {
+                    printf("There are no students matching that criteria.");
+                }
                 while (p != NULL)
                 {
                     printf("%s: \n\tID - %s\n", p->pStudent->name, p->pStudent->id);
@@ -238,6 +251,10 @@ int main()
             case '5':
             {
                 StudentNode *p = db->pSophomoreList;
+                if (p == NULL)
+                {
+                    printf("There are no students matching that criteria.");
+                }
                 while (p != NULL)
                 {
                     printf("%s: \n\tID - %s\n", p->pStudent->name, p->pStudent->id);
@@ -252,6 +269,11 @@ int main()
             case '6':
             {
                 StudentNode *p = db->pJuniorList;
+                if (p == NULL)
+                {
+                    printf("There are no students matching that criteria.");
+                }
+                
                 while (p != NULL)
                 {
                     printf("%s: \n\tID - %s\n", p->pStudent->name, p->pStudent->id);
@@ -266,6 +288,10 @@ int main()
             case '7':
             {
                 StudentNode *p = db->pSeniorList;
+                if (p == NULL)
+                {
+                    printf("There are no students matching that criteria.");
+                }
                 while (p != NULL)
                 {
                     printf("%s: \n\tID - %s\n", p->pStudent->name, p->pStudent->id);
