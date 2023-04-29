@@ -37,7 +37,7 @@ Database *createDatabase();
 Student *createStudent(char *name, char *id, double gpa, int creditHours);
 void addStudent(Database *db, Student *student);
 // void deleteStudent(Database *db, char *id);
-// void printStudent(Student *student);
+void printStudent(Student *student);
 // void printDatabase(Database *db);
 // void printHonorRoll(Database *db);
 // void printAcademicProbation(Database *db);
@@ -274,6 +274,32 @@ int main()
                 printf("\n");
                 break;
             }
+
+            case '8':
+            {
+                printf("Enter the id of the student to find: ");
+                scanf("%s", id);
+                StudentNode *p = db->pIDList;
+                while (p != NULL)
+                {
+                    if (strcmp(p->pStudent->id, id) == 0)
+                    {
+                        printf("%s: \n\tID - %s\n", p->pStudent->name, p->pStudent->id);
+                        printf("\tGPA - %.2lf\n", p->pStudent->gpa);
+                        printf("\tCredit hours - %d\n", p->pStudent->creditHours);
+                        break;
+                    }
+                    p = p->pNext;
+                }
+                if (p == NULL)
+                {
+                    printf("Sorry, there is no student in the database with the id %s.\n", id);
+                    printf("Enter:\tC to create a new student and add them to the database,\n\tR to read from the database,\n\tD to delete a student from the database, or\n\tX to exit the program.\nYour choice --> ");
+                    scanf(" %c", &choice);
+                    continue;
+                }
+                break;
+            }
             }
         }
         break;
@@ -442,7 +468,6 @@ void addStudent(Database *db, Student *student)
             newSeniorNode->pNext = curr;
         }
     }
-
 
     // Insert student into honor roll or academic probation list
     if (student->gpa >= 3.5)
