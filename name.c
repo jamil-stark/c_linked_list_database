@@ -252,9 +252,28 @@ void addStudent(Database *db, Student *student)
     newNode->pStudent = student;
     newNode->pNext = NULL;
 
-    // Insert student into ID list
-    newNode->pNext = db->pIDList;
-    db->pIDList = newNode;
+    // Traverse the list to find the correct position to insert the new node
+    StudentNode *prev = NULL;
+    StudentNode *curr = db->pIDList;
+    while (curr != NULL && strcmp(curr->pStudent->name, student->name) < 0)
+    {
+        prev = curr;
+        curr = curr->pNext;
+    }
+
+    // Insert the new node
+    if (prev == NULL)
+    {
+        // Insert at the beginning of the list
+        newNode->pNext = db->pIDList;
+        db->pIDList = newNode;
+    }
+    else
+    {
+        // Insert in the middle or at the end of the list
+        prev->pNext = newNode;
+        newNode->pNext = curr;
+    }
 
     // Insert student into class standing lists
     if (student->creditHours < 30)
