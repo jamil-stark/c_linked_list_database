@@ -61,7 +61,7 @@ int main()
     scanf("%c", &choice);
     while (choice != 'E' && choice != 'F')
     {
-        printf("Invalid input. Please enter E or F: ");
+        printf("Sorry, that input was invalid. Please try again.\nYour choice --> ");
         scanf(" %c", &choice);
     }
 
@@ -344,7 +344,7 @@ void addStudent(Database *db, Student *student)
     // Traverse the list to find the correct position to insert the new node
     StudentNode *prev = NULL;
     StudentNode *curr = db->pIDList;
-    while (curr != NULL && strcmp(curr->pStudent->name, student->name) < 0)
+    while (curr != NULL && strcmp(curr->pStudent->id, student->id) < 0)
     {
         prev = curr;
         curr = curr->pNext;
