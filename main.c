@@ -179,14 +179,13 @@ int main()
             {
             case '1':
             {
-                printf("\nInformation of first 10 students:\n");
                 int count = 0;
                 StudentNode *p = db->pIDList;
                 while (count < 10 && p != NULL)
                 {
-                    printf("\nName: %s %s\n", p->pStudent->name, p->pStudent->id);
-                    printf("GPA: %.2lf\n", p->pStudent->gpa);
-                    printf("Credit hours: %d\n", p->pStudent->creditHours);
+                    printf("\nName: \t%s \n\tID - %s\n", p->pStudent->name, p->pStudent->id);
+                    printf("\tGPA - %.2lf\n", p->pStudent->gpa);
+                    printf("\tCredit hours - %d\n", p->pStudent->creditHours);
                     p = p->pNext;
                     count++;
                 }
@@ -194,26 +193,24 @@ int main()
             }
             case '2':
             {
-                printf("\nStudents on honor roll:\n");
                 StudentNode *p = db->pHonorRollList;
                 while (p != NULL)
                 {
-                    printf("\nName: %s %s\n", p->pStudent->name, p->pStudent->id);
-                    printf("GPA: %.2lf\n", p->pStudent->gpa);
-                    printf("Credit hours: %d\n", p->pStudent->creditHours);
+                    printf("\nName: \t%s \n\tID - %s\n", p->pStudent->name, p->pStudent->id);
+                    printf("\tGPA - %.2lf\n", p->pStudent->gpa);
+                    printf("\tCredit hours - %d\n", p->pStudent->creditHours);
                     p = p->pNext;
                 }
                 break;
             }
             case '3':
             {
-                printf("\nStudents on probation:\n");
                 StudentNode *p = db->pAcademicProbationList;
                 while (p != NULL)
                 {
-                    printf("\nName: %s %s\n", p->pStudent->name, p->pStudent->id);
-                    printf("GPA: %.2lf\n", p->pStudent->gpa);
-                    printf("Credit hours: %d\n", p->pStudent->creditHours);
+                    printf("\nName: \t%s \n\tID - %s\n", p->pStudent->name, p->pStudent->id);
+                    printf("\tGPA - %.2lf\n", p->pStudent->gpa);
+                    printf("\tCredit hours - %d\n", p->pStudent->creditHours);
                     p = p->pNext;
                 }
                 break;
@@ -221,17 +218,57 @@ int main()
 
             case '4':
             {
-                printf("\nFreshmen:\n");
                 StudentNode *p = db->pFreshmanList;
                 while (p != NULL)
                 {
-                    printf("\nName: %s %s\n", p->pStudent->name, p->pStudent->id);
-                    printf("GPA: %.2lf\n", p->pStudent->gpa);
-                    printf("Credit hours: %d\n", p->pStudent->creditHours);
+                    printf("\nName: \t%s \n\tID - %s\n", p->pStudent->name, p->pStudent->id);
+                    printf("\tGPA - %.2lf\n", p->pStudent->gpa);
+                    printf("\tCredit hours - %d\n", p->pStudent->creditHours);
                     p = p->pNext;
                 }
                 break;
             }
+
+            case '5':
+            {
+                StudentNode *p = db->pSophomoreList;
+                while (p != NULL)
+                {
+                    printf("\nName: \t%s \n\tID - %s\n", p->pStudent->name, p->pStudent->id);
+                    printf("\tGPA - %.2lf\n", p->pStudent->gpa);
+                    printf("\tCredit hours - %d\n", p->pStudent->creditHours);
+                    p = p->pNext;
+                }
+                break;
+            }
+
+            case '6':
+            {
+                StudentNode *p = db->pJuniorList;
+                while (p != NULL)
+                {
+                    printf("\nName: \t%s \n\tID - %s\n", p->pStudent->name, p->pStudent->id);
+                    printf("\tGPA - %.2lf\n", p->pStudent->gpa);
+                    printf("\tCredit hours - %d\n", p->pStudent->creditHours);
+                    p = p->pNext;
+                }
+                break;
+            }
+
+            case '7':
+            {
+                StudentNode *p = db->pSeniorList;
+                while (p != NULL)
+                {
+                    printf("\nName: \t%s \n\tID - %s\n", p->pStudent->name, p->pStudent->id);
+                    printf("\tGPA - %.2lf\n", p->pStudent->gpa);
+                    printf("\tCredit hours - %d\n", p->pStudent->creditHours);
+                    p = p->pNext;
+                }
+                break;
+            }
+
+
             }
         }
         break;
@@ -369,11 +406,36 @@ void addStudent(Database *db, Student *student)
     }
 
     else if (student->gpa < 2.0)
+    // {
+    //     StudentNode *newAcademicProbationNode = malloc(sizeof(StudentNode));
+    //     newAcademicProbationNode->pStudent = student;
+    //     newAcademicProbationNode->pNext = db->pAcademicProbationList;
+    //     db->pAcademicProbationList = newAcademicProbationNode;
+    // }
     {
+        // Create new student node
         StudentNode *newAcademicProbationNode = malloc(sizeof(StudentNode));
         newAcademicProbationNode->pStudent = student;
-        newAcademicProbationNode->pNext = db->pAcademicProbationList;
-        db->pAcademicProbationList = newAcademicProbationNode;
+        newAcademicProbationNode->pNext = NULL;
+
+        // Insert student into Honor Roll list in order of GPA
+        StudentNode *prev = NULL;
+        StudentNode *curr = db->pAcademicProbationList;
+        while (curr != NULL && student->gpa > curr->pStudent->gpa)
+        {
+            prev = curr;
+            curr = curr->pNext;
+        }
+        if (prev == NULL)
+        {
+            newAcademicProbationNode->pNext = db->pAcademicProbationList;
+            db->pAcademicProbationList = newAcademicProbationNode;
+        }
+        else
+        {
+            prev->pNext = newAcademicProbationNode;
+            newAcademicProbationNode->pNext = curr;
+        }
     }
 }
 
