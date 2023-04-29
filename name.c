@@ -218,6 +218,20 @@ int main()
                 }
                 break;
             }
+
+            case '4':
+            {
+                printf("\nFreshmen:\n");
+                StudentNode *p = db->pFreshmanList;
+                while (p != NULL)
+                {
+                    printf("\nName: %s %s\n", p->pStudent->name, p->pStudent->id);
+                    printf("GPA: %.2lf\n", p->pStudent->gpa);
+                    printf("Credit hours: %d\n", p->pStudent->creditHours);
+                    p = p->pNext;
+                }
+                break;
+            }
             }
         }
         break;
@@ -278,11 +292,32 @@ void addStudent(Database *db, Student *student)
     // Insert student into class standing lists
     if (student->creditHours < 30)
     {
-        StudentNode *newFreshmanNode = malloc(sizeof(StudentNode));
-        newFreshmanNode->pStudent = student;
-        newFreshmanNode->pNext = db->pFreshmanList;
-        db->pFreshmanList = newFreshmanNode;
+        StudentNode *newNode = malloc(sizeof(StudentNode));
+        newNode->pStudent = student;
+        newNode->pNext = NULL;
+
+        // Find the correct position to insert the new node in the Freshman list
+        StudentNode *prev = NULL;
+        StudentNode *curr = db->pFreshmanList;
+        while (curr != NULL && strcmp(curr->pStudent->name, student->name) < 0)
+        {
+            prev = curr;
+            curr = curr->pNext;
+        }
+
+        // Insert the new node in the Freshman list
+        if (prev == NULL)
+        {
+            newNode->pNext = db->pFreshmanList;
+            db->pFreshmanList = newNode;
+        }
+        else
+        {
+            prev->pNext = newNode;
+            newNode->pNext = curr;
+        }
     }
+
     else if (student->creditHours < 60)
     {
         StudentNode *newSophomoreNode = malloc(sizeof(StudentNode));
